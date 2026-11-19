@@ -35,18 +35,13 @@ function addRow(data = {}) {
     <td class="calculated days" data-output="days">0</td>
     <td class="calculated" data-output="daily">₹0.00</td>
     <td class="calculated" data-output="interest">₹0.00</td>
-    <td class="calculated" data-output="amount">₹0.00</td>
-    <td><button class="remove-btn" type="button" title="Delete entry" aria-label="Delete entry">✕</button></td>`;
+    <td class="calculated" data-output="amount">₹0.00</td>`;
   for (const [field, value] of Object.entries(data)) {
     const input = tr.querySelector(`[data-field="${field}"]`);
     if (input) input.value = value;
   }
   recordsBody.appendChild(tr);
   tr.addEventListener('input', recalculate);
-  tr.querySelector('.remove-btn').addEventListener('click', () => {
-    tr.remove();
-    recalculate();
-  });
   recalculate();
 }
 function recalculate() {
@@ -60,12 +55,10 @@ function recalculate() {
     const daily = principal * rate / 100;
     const interest = daily * days;
     const amount = principal + interest;
-
     tr.querySelector('[data-output="days"]').textContent = days;
     tr.querySelector('[data-output="daily"]').textContent = money(daily);
     tr.querySelector('[data-output="interest"]').textContent = money(interest);
     tr.querySelector('[data-output="amount"]').textContent = money(amount);
-
     principalTotal += principal;
     interestTotal += interest;
     amountTotal += amount;
@@ -79,18 +72,14 @@ function recalculate() {
   document.getElementById('recordCount').textContent = `${count} ${count === 1 ? 'record' : 'records'}`;
   document.getElementById('emptyState').classList.toggle('d-none', count !== 0);
 }
-// Sample rows matching the provided screenshot. To Date automatically uses today's date on page load.
+// Existing sample entries are retained. To Date automatically uses today's date.
 addRow({ from: '2026-11-02', name: 'KESHAV', principal: 2500, rate: 20, to: todayISO });
 addRow({ from: '2026-11-07', name: 'KESHAV', principal: 2400, rate: 20, to: todayISO });
 
-
-// Keep the calculator hidden until GPS location is successfully obtained.
+// Show the location gate on startup. Calculator remains hidden until GPS verification succeeds.
 document.addEventListener('DOMContentLoaded', () => {
   const popupElement = document.getElementById('showDataModal');
-  const popup = new bootstrap.Modal(popupElement, {
-    backdrop: 'static',
-    keyboard: false
-  });
+  const popup = new bootstrap.Modal(popupElement, { backdrop: 'static', keyboard: false });
   window.locationGatePopup = popup;
   popup.show();
 });

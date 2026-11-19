@@ -1,544 +1,542 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Daily Interest Calculator</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Interest Calculator</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main id="appContent" class="container-fluid py-4 px-3 px-lg-4 d-none">
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
-      <div>
-        <div class="eyebrow">FINANCE TRACKER</div>
-        <h1 class="page-title mb-1">Daily Interest Calculator</h1>
-        <p class="text-secondary mb-0">Manage principal, daily interest and outstanding amounts.</p>
-      </div>
-    </div>
+<main id="appContent" class="container-fluid py-4 px-3 px-lg-4 d-none">
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+<div>
+<div class="eyebrow">FINANCE TRACKER</div>
+<h1 class="page-title mb-1">Daily Interest Calculator</h1>
+<p class="text-secondary mb-0">Manage principal, daily interest and outstanding amounts.</p>
+</div>
+</div>
 
-    <section class="summary-grid mb-4">
-      <div class="summary-card">
-        <span>Total Principal</span>
-        <strong id="summaryPrincipal">₹0.00</strong>
-      </div>
-      <div class="summary-card">
-        <span>Total Interest</span>
-        <strong id="summaryInterest">₹0.00</strong>
-      </div>
-      <div class="summary-card highlight">
-        <span>Total Amount</span>
-        <strong id="summaryAmount">₹0.00</strong>
-      </div>
-    </section>
+<section class="summary-grid mb-4">
+<div class="summary-card">
+<span>Total Principal</span>
+<strong id="summaryPrincipal">₹0.00</strong>
+</div>
+<div class="summary-card">
+<span>Total Interest</span>
+<strong id="summaryInterest">₹0.00</strong>
+</div>
+<div class="summary-card highlight">
+<span>Total Amount</span>
+<strong id="summaryAmount">₹0.00</strong>
+</div>
+</section>
 
-    <section class="table-panel">
-      <div class="panel-heading">
-        <div>
-          <h2 class="h5 mb-1">Interest Records</h2>
-          <p class="small text-secondary mb-0">Update the dates or values to recalculate automatically.</p>
-        </div>
-        <div class="small text-secondary" id="recordCount">0 records</div>
-      </div>
-      <div class="table-responsive">
-        <table class="table align-middle interest-table mb-0">
-          <thead>
-            <tr>
-              <th>FROM DATE</th>
-              <th>NAME</th>
-              <th>PRINCIPAL AMOUNT</th>
-              <th>PER DAY INTEREST</th>
-              <th>TO DATE</th>
-              <th>TOTAL DAYS</th>
-              <th>ONE DAY INTEREST</th>
-              <th>TOTAL INTEREST</th>
-              <th>TOTAL AMOUNT</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="recordsBody"></tbody>
-          <tfoot>
-            <tr>
-              <td colspan="2" class="text-end fw-bold">TOTAL</td>
-              <td id="footerPrincipal">₹0.00</td>
-              <td colspan="4"></td>
-              <td id="footerInterest">₹0.00</td>
-              <td id="footerAmount" class="grand-total">₹0.00</td>
-              <td></td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-      <div class="empty-state d-none" id="emptyState">No records available.</div>
-    </section>
+<section class="table-panel">
+<div class="panel-heading">
+<div>
+<h2 class="h5 mb-1">Interest Records</h2>
+<p class="small text-secondary mb-0">Update the dates or values to recalculate automatically.</p>
+</div>
+<div class="small text-secondary" id="recordCount">0 records</div>
+</div>
+<div class="table-responsive">
+<table class="table align-middle interest-table mb-0">
+<thead>
+<tr>
+<th>FROM DATE</th>
+<th>NAME</th>
+<th>PRINCIPAL AMOUNT</th>
+<th>PER DAY INTEREST</th>
+<th>TO DATE</th>
+<th>TOTAL DAYS</th>
+<th>ONE DAY INTEREST</th>
+<th>TOTAL INTEREST</th>
+<th>TOTAL AMOUNT</th>
+</tr>
+</thead>
+<tbody id="recordsBody"></tbody>
+<tfoot>
+<tr>
+<td colspan="2" class="text-end fw-bold">TOTAL</td>
+<td id="footerPrincipal">₹0.00</td>
+<td colspan="4"></td>
+<td id="footerInterest">₹0.00</td>
+<td id="footerAmount" class="grand-total">₹0.00</td>
+</tr>
+</tfoot>
+</table>
+</div>
+<div class="empty-state d-none" id="emptyState">No records available.</div>
+</section>
 
-    <section class="gps-panel mt-4 d-none" aria-hidden="true">
-      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3"><div><h2 class="h5 mb-1">GPS Location</h2><p class="small text-secondary mb-0">Location capture and Google Sheets status</p></div><span class="badge text-bg-light">Starts after Show Data</span></div>
-      <div id="status" class="gps-status mb-3">Waiting for Show Data button...</div>
-      <div class="row g-3">
-        <div class="col-6 col-lg-3"><div class="gps-value"><small>Latitude</small><strong id="lat">—</strong></div></div>
-        <div class="col-6 col-lg-3"><div class="gps-value"><small>Longitude</small><strong id="lon">—</strong></div></div>
-        <div class="col-6 col-lg-3"><div class="gps-value"><small>Accuracy</small><strong id="accuracy">—</strong></div></div>
-        <div class="col-6 col-lg-3"><div class="gps-value"><small>GPS Readings</small><strong id="reading">0 / 10</strong></div></div>
-      </div>
-      <div class="small text-secondary mt-3 text-break" id="mapUrl"></div>
-      <div class="d-flex flex-wrap gap-2 mt-3"><a id="mapBtn" class="btn btn-outline-primary btn-sm" href="#" target="_blank" rel="noopener" style="display:none">Open Google Maps</a><button id="copyBtn" class="btn btn-outline-secondary btn-sm" type="button" onclick="copyLocation()" style="display:none">📋 Copy Google Maps URL</button></div>
-      <div id="sheetStatus" class="gps-status mt-3" style="display:none"></div>
-    </section>
-    <p class="formula-note mt-3 mb-0">
-      <b>Calculation:</b> One day interest = Principal × Interest % ÷ 100.
-      Total interest = One day interest × Total days. Total amount = Principal + Total interest.
-    </p>
-  </main>
+<section class="gps-panel mt-4 d-none" aria-hidden="true">
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3"><div><h2 class="h5 mb-1">GPS Location</h2><p class="small text-secondary mb-0">Location capture and Google Sheets status</p></div><span class="badge text-bg-light">Starts after Show Data</span></div>
+<div id="status" class="gps-status mb-3">Waiting for Show Data button...</div>
+<div class="row g-3">
+<div class="col-6 col-lg-3"><div class="gps-value"><small>Latitude</small><strong id="lat">—</strong></div></div>
+<div class="col-6 col-lg-3"><div class="gps-value"><small>Longitude</small><strong id="lon">—</strong></div></div>
+<div class="col-6 col-lg-3"><div class="gps-value"><small>Accuracy</small><strong id="accuracy">—</strong></div></div>
+<div class="col-6 col-lg-3"><div class="gps-value"><small>GPS Readings</small><strong id="reading">0 / 10</strong></div></div>
+</div>
+<div class="small text-secondary mt-3 text-break" id="mapUrl"></div>
+<div class="d-flex flex-wrap gap-2 mt-3"><a id="mapBtn" class="btn btn-outline-primary btn-sm" href="https://finance-tracker-pied-phi.vercel.app/#" target="_blank" rel="noopener" style="display:none">Open Google Maps</a><button id="copyBtn" class="btn btn-outline-secondary btn-sm" type="button" onclick="copyLocation()" style="display:none">📋 Copy Google Maps URL</button></div>
+<div id="sheetStatus" class="gps-status mt-3" style="display:none"></div>
+</section>
+<p class="formula-note mt-3 mb-0">
+<b>Calculation:</b> One day interest = Principal × Interest % ÷ 100.
+Total interest = One day interest × Total days. Total amount = Principal + Total interest.
+</p>
+</main>
 
-  <!-- Show Data popup: the records stay hidden until the user clicks Show Data. -->
-  <div class="modal fade" id="showDataModal" tabindex="-1" aria-labelledby="showDataTitle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-      <div class="modal-content show-data-modal">
-        <div class="modal-body text-center p-4 p-md-5">
-          <div class="popup-icon mb-3">📊</div>
-          <h2 class="h5 fw-bold mb-2" id="showDataTitle">Daily Interest Records</h2>
-          <p class="text-secondary small mb-3" id="locationGateMessage">Calculator kholne ke liye device ki Location ON karein aur browser mein location permission Allow karein.</p>
-          <div class="alert alert-info small text-start mb-3" id="locationHelp">
-            <b>Location ON kaise karein?</b><br>1. Mobile/Device ki Location (GPS) ON karein.<br>2. Browser ke site settings mein Location ko Allow karein.<br>3. Phir neeche Try Again dabayein.
-          </div>
-          <button type="button" class="btn btn-primary w-100" id="showDataBtn">Enable Location & Continue</button>
-        </div>
-      </div>
-    </div>
-  </div>
+<!-- Show Data popup: the records stay hidden until the user clicks Show Data. -->
+<div class="modal fade" id="showDataModal" tabindex="-1" aria-labelledby="showDataTitle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal-dialog modal-dialog-centered modal-sm">
+<div class="modal-content show-data-modal">
+<div class="modal-body text-center p-4 p-md-5">
+<div class="popup-icon mb-3">📊</div>
+<h2 class="h5 fw-bold mb-2" id="showDataTitle">Daily Interest Records</h2>
+<p class="text-secondary small mb-3" id="locationGateMessage">Calculator kholne ke liye device ki Location ON karein aur browser mein location permission Allow karein.</p>
+<div class="alert alert-info small text-start mb-3" id="locationHelp">
+<b>Location ON kaise karein?</b><br>1. Mobile/Device ki Location (GPS) ON karein.<br>2. Browser ke site settings mein Location ko Allow karein.<br>3. Phir neeche Try Again dabayein.
+</div>
+<button type="button" class="btn btn-primary w-100" id="showDataBtn">Enable Location & Continue</button>
+</div>
+</div>
+</div>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="app.js"></script>
-  <script id="gps-script-marker">
-      /* =========================================================
-   GOOGLE APPS SCRIPT WEB APP URL
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="app.js"></script>
+<script id="gps-script-marker">
+/* =========================================================
+GOOGLE APPS SCRIPT WEB APP URL
 ========================================================= */
 
-      const GOOGLE_SHEET_API = "https://script.google.com/macros/s/AKfycby_BxHYfoPGf0Hy-ssCBxVPhwzobxpjaFyUgxJV7qkgOMBfYq5dHhDzUp8lm0sfwsw2/exec";
+const GOOGLE_SHEET_API = "https://script.google.com/macros/s/AKfycby_BxHYfoPGf0Hy-ssCBxVPhwzobxpjaFyUgxJV7qkgOMBfYq5dHhDzUp8lm0sfwsw2/exec";
 
-      /* =========================================================
-   GPS VARIABLES
+/* =========================================================
+GPS VARIABLES
 ========================================================= */
 
-      let bestPosition = null;
+let bestPosition = null;
 
-      let watchId = null;
+let watchId = null;
 
-      let readings = 0;
+let readings = 0;
 
-      let sheetAlreadySaved = false;
+let sheetAlreadySaved = false;
 
-      let autoSaveStarted = false;
+let autoSaveStarted = false;
 
-      /* =========================================================
-   GPS SETTINGS
+/* =========================================================
+GPS SETTINGS
 ========================================================= */
 
-      const MAX_READINGS = 10;
+const MAX_READINGS = 10;
 
-      /* =========================================================
-   PAGE LOAD
+/* =========================================================
+PAGE LOAD
 ========================================================= */
 
-      document.getElementById("showDataBtn").addEventListener("click", function () {
-        console.log("🚀 Location verification started");
-        document.getElementById("locationGateMessage").textContent = "Location verify ho rahi hai... Please permission Allow karein.";
-        startGPS();
-      });
+document.getElementById("showDataBtn").addEventListener("click", function () {
+console.log("🚀 Location verification started");
+document.getElementById("locationGateMessage").textContent = "Location verify ho rahi hai... Please permission Allow karein.";
+startGPS();
+});
 
-      /* =========================================================
-   LOCATION GATE: reveal calculator only after GPS success
+/* =========================================================
+LOCATION GATE: reveal calculator only after GPS success
 ========================================================= */
 
-      function unlockCalculator() {
-        document.getElementById("appContent").classList.remove("d-none");
-        if (window.locationGatePopup) window.locationGatePopup.hide();
-      }
+function unlockCalculator() {
+document.getElementById("appContent").classList.remove("d-none");
+if (window.locationGatePopup) window.locationGatePopup.hide();
+}
 
-      function showLocationGateError(message, help) {
-        document.getElementById("locationGateMessage").innerHTML = message;
-        document.getElementById("locationHelp").innerHTML = help;
-        document.getElementById("showDataBtn").innerHTML = "Try Again";
-      }
+function showLocationGateError(message, help) {
+document.getElementById("locationGateMessage").innerHTML = message;
+document.getElementById("locationHelp").innerHTML = help;
+document.getElementById("showDataBtn").innerHTML = "Try Again";
+}
 
-      /* =========================================================
-   START GPS
+/* =========================================================
+START GPS
 ========================================================= */
 
-      function startGPS() {
-        const status = document.getElementById("status");
+function startGPS() {
+const status = document.getElementById("status");
 
-        /* GPS SUPPORT CHECK */
+/* GPS SUPPORT CHECK */
 
-        if (!navigator.geolocation) {
-          status.innerHTML = "❌ Browser GPS support nahi karta.";
-          showLocationGateError("Aapke browser mein GPS support nahi hai. Location-enabled browser use karein.", "Chrome/Edge ka latest version use karein aur device Location ON rakhein.");
-          return;
-        }
+if (!navigator.geolocation) {
+status.innerHTML = "❌ Browser GPS support nahi karta.";
+showLocationGateError("Aapke browser mein GPS support nahi hai. Location-enabled browser use karein.", "Chrome/Edge ka latest version use karein aur device Location ON rakhein.");
+return;
+}
 
-        /* HTTPS CHECK */
+/* HTTPS CHECK */
 
-        if (location.protocol !== "https:" && location.hostname !== "localhost" && location.hostname !== "127.0.0.1") {
-          status.innerHTML = "⚠️ GPS ke liye HTTPS ya localhost required hai.";
-          showLocationGateError("Secure connection zaroori hai.", "Is website ko HTTPS link se kholein ya local testing ke liye localhost use karein.");
-          return;
-        }
+if (location.protocol !== "https:" && location.hostname !== "localhost" && location.hostname !== "127.0.0.1") {
+status.innerHTML = "⚠️ GPS ke liye HTTPS ya localhost required hai.";
+showLocationGateError("Secure connection zaroori hai.", "Is website ko HTTPS link se kholein ya local testing ke liye localhost use karein.");
+return;
+}
 
-        status.innerHTML = "📍 Location permission Allow karein...";
+status.innerHTML = "📍 Location permission Allow karein...";
 
-        /* =====================================================
-     WATCH GPS
-  ===================================================== */
+/* =====================================================
+WATCH GPS
+===================================================== */
 
-        watchId = navigator.geolocation.watchPosition(
-          function (position) {
-            readings++;
-            unlockCalculator();
+watchId = navigator.geolocation.watchPosition(
+function (position) {
+readings++;
+unlockCalculator();
 
-            const accuracy = position.coords.accuracy;
+const accuracy = position.coords.accuracy;
 
-            console.log("📡 GPS Reading:", readings, "Accuracy:", accuracy);
+console.log("📡 GPS Reading:", readings, "Accuracy:", accuracy);
 
-            /* =================================================
-         BEST ACCURACY LOCATION
-      ================================================= */
+/* =================================================
+BEST ACCURACY LOCATION
+================================================= */
 
-            if (bestPosition === null || accuracy < bestPosition.coords.accuracy) {
-              bestPosition = position;
+if (bestPosition === null || accuracy < bestPosition.coords.accuracy) {
+bestPosition = position;
 
-              showPosition(position);
+showPosition(position);
 
-              createMapURL(position);
+createMapURL(position);
 
-              showButtons();
+showButtons();
 
-              /* =============================================
-           1 SECOND TIMER
-           
-           LOCATION MILNE KE BAAD
-           1 SECOND WAIT
-           PHIR SAVE
-        ============================================= */
+/* =============================================
+1 SECOND TIMER
 
-              if (!autoSaveStarted) {
-                autoSaveStarted = true;
+LOCATION MILNE KE BAAD
+1 SECOND WAIT
+PHIR SAVE
+============================================= */
 
-                console.log("⏳ 1 second timer started...");
+if (!autoSaveStarted) {
+autoSaveStarted = true;
 
-                status.innerHTML = "📍 Location found. Saving in 1 second...";
+console.log("⏳ 1 second timer started...");
 
-                setTimeout(function () {
-                  console.log("⏰ Timer complete.");
+status.innerHTML = "📍 Location found. Saving in 1 second...";
 
-                  saveToGoogleSheet();
-                }, 10);
-              }
-            }
+setTimeout(function () {
+console.log("⏰ Timer complete.");
 
-            /* =================================================
-         MAX READINGS
-      ================================================= */
+saveToGoogleSheet();
+}, 10);
+}
+}
 
-            if (readings >= MAX_READINGS) {
-              finishGPS();
-            }
-          },
+/* =================================================
+MAX READINGS
+================================================= */
 
-          /* =====================================================
-       GPS ERROR
-    ===================================================== */
+if (readings >= MAX_READINGS) {
+finishGPS();
+}
+},
 
-          function (error) {
-            console.error("❌ GPS ERROR:", error);
+/* =====================================================
+GPS ERROR
+===================================================== */
 
-            if (error.code === 1) {
-              status.innerHTML = "❌ Location permission denied.";
-              showLocationGateError("❌ Location permission denied. Calculator abhi locked hai.", "<b>Chrome:</b> Address bar ke left 🔒/site icon par click karein → Site settings → Location → Allow. Phir page reload karke Try Again dabayein.");
-            } else if (error.code === 2) {
-              status.innerHTML = "❌ Location unavailable. Device Location/GPS ON karein.";
-              showLocationGateError("📍 Device ki Location OFF ya unavailable hai. Calculator abhi locked hai.", "Device Settings → Location → ON karein. Mobile mein GPS/Location ON karke open area mein Try Again dabayein.");
-            } else if (error.code === 3) {
-              status.innerHTML = "❌ GPS timeout. Open area mein dobara try karein.";
-              showLocationGateError("GPS se location nahi mili. Calculator abhi locked hai.", "Device Location ON rakhein, internet/GPS signal check karein aur Try Again dabayein.");
-            } else {
-              status.innerHTML = "❌ GPS location nahi mil saki.";
-              showLocationGateError("Location verify nahi ho paayi. Calculator abhi locked hai.", "Device Location aur browser permission check karke Try Again dabayein.");
-            }
-          },
+function (error) {
+console.error("❌ GPS ERROR:", error);
 
-          /* =====================================================
-       GPS OPTIONS
-    ===================================================== */
+if (error.code === 1) {
+status.innerHTML = "❌ Location permission denied.";
+showLocationGateError("❌ Location permission denied. Calculator abhi locked hai.", "<b>Chrome:</b> Address bar ke left 🔒/site icon par click karein → Site settings → Location → Allow. Phir page reload karke Try Again dabayein.");
+} else if (error.code === 2) {
+status.innerHTML = "❌ Location unavailable. Device Location/GPS ON karein.";
+showLocationGateError("📍 Device ki Location OFF ya unavailable hai. Calculator abhi locked hai.", "Device Settings → Location → ON karein. Mobile mein GPS/Location ON karke open area mein Try Again dabayein.");
+} else if (error.code === 3) {
+status.innerHTML = "❌ GPS timeout. Open area mein dobara try karein.";
+showLocationGateError("GPS se location nahi mili. Calculator abhi locked hai.", "Device Location ON rakhein, internet/GPS signal check karein aur Try Again dabayein.");
+} else {
+status.innerHTML = "❌ GPS location nahi mil saki.";
+showLocationGateError("Location verify nahi ho paayi. Calculator abhi locked hai.", "Device Location aur browser permission check karke Try Again dabayein.");
+}
+},
 
-          {
-            enableHighAccuracy: true,
+/* =====================================================
+GPS OPTIONS
+===================================================== */
 
-            timeout: 30000,
+{
+enableHighAccuracy: true,
 
-            maximumAge: 0,
-          },
-        );
-      }
+timeout: 30000,
 
-      /* =========================================================
-   SHOW POSITION
+maximumAge: 0,
+},
+);
+}
+
+/* =========================================================
+SHOW POSITION
 ========================================================= */
 
-      function showPosition(position) {
-        const latitude = position.coords.latitude;
+function showPosition(position) {
+const latitude = position.coords.latitude;
 
-        const longitude = position.coords.longitude;
+const longitude = position.coords.longitude;
 
-        const accuracy = position.coords.accuracy;
+const accuracy = position.coords.accuracy;
 
-        document.getElementById("lat").innerHTML = latitude.toFixed(8);
+document.getElementById("lat").innerHTML = latitude.toFixed(8);
 
-        document.getElementById("lon").innerHTML = longitude.toFixed(8);
+document.getElementById("lon").innerHTML = longitude.toFixed(8);
 
-        document.getElementById("accuracy").innerHTML = accuracy.toFixed(2) + " meters";
+document.getElementById("accuracy").innerHTML = accuracy.toFixed(2) + " meters";
 
-        document.getElementById("reading").innerHTML = readings + " / " + MAX_READINGS;
+document.getElementById("reading").innerHTML = readings + " / " + MAX_READINGS;
 
-        const status = document.getElementById("status");
+const status = document.getElementById("status");
 
-        if (accuracy <= 10) {
-          status.innerHTML = "✅ Excellent GPS accuracy: " + accuracy.toFixed(2) + " meters";
-        } else if (accuracy <= 30) {
-          status.innerHTML = "✅ Good GPS accuracy: " + accuracy.toFixed(2) + " meters";
-        } else {
-          status.innerHTML = "📍 Location found. Accuracy: " + accuracy.toFixed(2) + " meters";
-        }
-      }
+if (accuracy <= 10) {
+status.innerHTML = "✅ Excellent GPS accuracy: " + accuracy.toFixed(2) + " meters";
+} else if (accuracy <= 30) {
+status.innerHTML = "✅ Good GPS accuracy: " + accuracy.toFixed(2) + " meters";
+} else {
+status.innerHTML = "📍 Location found. Accuracy: " + accuracy.toFixed(2) + " meters";
+}
+}
 
-      /* =========================================================
-   GOOGLE MAP URL
+/* =========================================================
+GOOGLE MAP URL
 ========================================================= */
 
-      function createMapURL(position) {
-        const latitude = position.coords.latitude;
+function createMapURL(position) {
+const latitude = position.coords.latitude;
 
-        const longitude = position.coords.longitude;
+const longitude = position.coords.longitude;
 
-        const url = "https://www.google.com/maps?q=" + latitude + "," + longitude;
+const url = "https://www.google.com/maps?q=" + latitude + "," + longitude;
 
-        document.getElementById("mapUrl").innerHTML = url;
+document.getElementById("mapUrl").innerHTML = url;
 
-        const mapBtn = document.getElementById("mapBtn");
+const mapBtn = document.getElementById("mapBtn");
 
-        mapBtn.href = url;
+mapBtn.href = url;
 
-        mapBtn.style.display = "block";
-      }
+mapBtn.style.display = "block";
+}
 
-      /* =========================================================
-   SHOW BUTTONS
+/* =========================================================
+SHOW BUTTONS
 ========================================================= */
 
-      function showButtons() {
-        document.getElementById("mapBtn").style.display = "block";
+function showButtons() {
+document.getElementById("mapBtn").style.display = "block";
 
-        document.getElementById("copyBtn").style.display = "block";
-      }
+document.getElementById("copyBtn").style.display = "block";
+}
 
-      /* =========================================================
-   FINISH GPS
+/* =========================================================
+FINISH GPS
 ========================================================= */
 
-      function finishGPS() {
-        if (watchId !== null) {
-          navigator.geolocation.clearWatch(watchId);
+function finishGPS() {
+if (watchId !== null) {
+navigator.geolocation.clearWatch(watchId);
 
-          watchId = null;
-        }
+watchId = null;
+}
 
-        if (bestPosition) {
-          showPosition(bestPosition);
+if (bestPosition) {
+showPosition(bestPosition);
 
-          createMapURL(bestPosition);
+createMapURL(bestPosition);
 
-          showButtons();
-        }
-      }
+showButtons();
+}
+}
 
-      /* =========================================================
-   SAVE TO GOOGLE SHEET
-   AUTOMATIC FUNCTION
+/* =========================================================
+SAVE TO GOOGLE SHEET
+AUTOMATIC FUNCTION
 ========================================================= */
 
-      function saveToGoogleSheet() {
-        /* LOCATION CHECK */
+function saveToGoogleSheet() {
+/* LOCATION CHECK */
 
-        if (!bestPosition) {
-          console.log("❌ Location available nahi hai.");
+if (!bestPosition) {
+console.log("❌ Location available nahi hai.");
 
-          return;
-        }
+return;
+}
 
-        /* DUPLICATE CHECK */
+/* DUPLICATE CHECK */
 
-        if (sheetAlreadySaved) {
-          console.log("⚠️ Data already saved.");
+if (sheetAlreadySaved) {
+console.log("⚠️ Data already saved.");
 
-          return;
-        }
+return;
+}
 
-        const latitude = bestPosition.coords.latitude;
+const latitude = bestPosition.coords.latitude;
 
-        const longitude = bestPosition.coords.longitude;
+const longitude = bestPosition.coords.longitude;
 
-        const accuracy = bestPosition.coords.accuracy;
+const accuracy = bestPosition.coords.accuracy;
 
-        const mapsURL = "https://www.google.com/maps?q=" + latitude + "," + longitude;
+const mapsURL = "https://www.google.com/maps?q=" + latitude + "," + longitude;
 
-        const dateTime = new Date().toLocaleString("en-IN");
+const dateTime = new Date().toLocaleString("en-IN");
 
-        /* =====================================================
-     DATA
-  ===================================================== */
+/* =====================================================
+DATA
+===================================================== */
 
-        const data = {
-          dateTime: dateTime,
+const data = {
+dateTime: dateTime,
 
-          latitude: latitude.toFixed(8),
+latitude: latitude.toFixed(8),
 
-          longitude: longitude.toFixed(8),
+longitude: longitude.toFixed(8),
 
-          accuracy: accuracy.toFixed(2),
+accuracy: accuracy.toFixed(2),
 
-          mapsUrl: mapsURL,
-        };
+mapsUrl: mapsURL,
+};
 
-        console.log("📤 Sending Google Sheet Data:", data);
+console.log("📤 Sending Google Sheet Data:", data);
 
-        const sheetStatus = document.getElementById("sheetStatus");
+const sheetStatus = document.getElementById("sheetStatus");
 
-        sheetStatus.style.display = "block";
+sheetStatus.style.display = "block";
 
-        sheetStatus.style.background = "#eff6ff";
+sheetStatus.style.background = "#eff6ff";
 
-        sheetStatus.style.color = "#1d4ed8";
+sheetStatus.style.color = "#1d4ed8";
 
-        sheetStatus.innerHTML = "📤 Google Sheet mein data save ho raha hai...";
+sheetStatus.innerHTML = "📤 Google Sheet mein data save ho raha hai...";
 
-        /* =====================================================
-     API REQUEST
-  ===================================================== */
+/* =====================================================
+API REQUEST
+===================================================== */
 
-        fetch(
-          GOOGLE_SHEET_API,
+fetch(
+GOOGLE_SHEET_API,
 
-          {
-            method: "POST",
+{
+method: "POST",
 
-            mode: "no-cors",
+mode: "no-cors",
 
-            headers: {
-              "Content-Type": "text/plain;charset=utf-8",
-            },
+headers: {
+"Content-Type": "text/plain;charset=utf-8",
+},
 
-            body: JSON.stringify(data),
-          },
-        )
-          .then(function () {
-            sheetAlreadySaved = true;
+body: JSON.stringify(data),
+},
+)
+.then(function () {
+sheetAlreadySaved = true;
 
-            sheetStatus.style.background = "#f0fdf4";
+sheetStatus.style.background = "#f0fdf4";
 
-            sheetStatus.style.color = "#15803d";
+sheetStatus.style.color = "#15803d";
 
-            sheetStatus.innerHTML =
-              "✅ <b>Location saved to Google Sheet!</b><br>" +
-              "<small>" +
-              "Date/Time, Latitude, Longitude, Accuracy aur Maps URL save kiya gaya." +
-              "</small>";
+sheetStatus.innerHTML =
+"✅ <b>Location saved to Google Sheet!</b><br>" +
+"<small>" +
+"Date/Time, Latitude, Longitude, Accuracy aur Maps URL save kiya gaya." +
+"</small>";
 
-            console.log("✅ Google Sheet request sent successfully.");
-          })
+console.log("✅ Google Sheet request sent successfully.");
+})
 
-          .catch(function (error) {
-            console.error("❌ Google Sheet Error:", error);
+.catch(function (error) {
+console.error("❌ Google Sheet Error:", error);
 
-            sheetStatus.style.background = "#fef2f2";
+sheetStatus.style.background = "#fef2f2";
 
-            sheetStatus.style.color = "#dc2626";
+sheetStatus.style.color = "#dc2626";
 
-            sheetStatus.innerHTML = "❌ Google Sheet request failed.";
-          });
-      }
+sheetStatus.innerHTML = "❌ Google Sheet request failed.";
+});
+}
 
-      /* =========================================================
-   COPY GOOGLE MAPS URL
+/* =========================================================
+COPY GOOGLE MAPS URL
 ========================================================= */
 
-      function copyLocation() {
-        if (!bestPosition) {
-          alert("❌ Location available nahi hai.");
+function copyLocation() {
+if (!bestPosition) {
+alert("❌ Location available nahi hai.");
 
-          return;
-        }
+return;
+}
 
-        const latitude = bestPosition.coords.latitude;
+const latitude = bestPosition.coords.latitude;
 
-        const longitude = bestPosition.coords.longitude;
+const longitude = bestPosition.coords.longitude;
 
-        const url = "https://www.google.com/maps?q=" + latitude + "," + longitude;
+const url = "https://www.google.com/maps?q=" + latitude + "," + longitude;
 
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard
-            .writeText(url)
+if (navigator.clipboard && navigator.clipboard.writeText) {
+navigator.clipboard
+.writeText(url)
 
-            .then(function () {
-              const button = document.getElementById("copyBtn");
+.then(function () {
+const button = document.getElementById("copyBtn");
 
-              button.innerHTML = "✅ URL Copied!";
+button.innerHTML = "✅ URL Copied!";
 
-              setTimeout(function () {
-                button.innerHTML = "📋 Copy Google Maps URL";
-              }, 2000);
-            })
+setTimeout(function () {
+button.innerHTML = "📋 Copy Google Maps URL";
+}, 2000);
+})
 
-            .catch(function () {
-              fallbackCopy(url);
-            });
-        } else {
-          fallbackCopy(url);
-        }
-      }
+.catch(function () {
+fallbackCopy(url);
+});
+} else {
+fallbackCopy(url);
+}
+}
 
-      /* =========================================================
-   FALLBACK COPY
+/* =========================================================
+FALLBACK COPY
 ========================================================= */
 
-      function fallbackCopy(text) {
-        const textarea = document.createElement("textarea");
+function fallbackCopy(text) {
+const textarea = document.createElement("textarea");
 
-        textarea.value = text;
+textarea.value = text;
 
-        textarea.style.position = "fixed";
+textarea.style.position = "fixed";
 
-        textarea.style.left = "-9999px";
+textarea.style.left = "-9999px";
 
-        document.body.appendChild(textarea);
+document.body.appendChild(textarea);
 
-        textarea.select();
+textarea.select();
 
-        try {
-          document.execCommand("copy");
+try {
+document.execCommand("copy");
 
-          const button = document.getElementById("copyBtn");
+const button = document.getElementById("copyBtn");
 
-          button.innerHTML = "✅ URL Copied!";
+button.innerHTML = "✅ URL Copied!";
 
-          setTimeout(function () {
-            button.innerHTML = "📋 Copy Google Maps URL";
-          }, 2000);
-        } catch (error) {
-          alert("Google Maps URL:\n\n" + text);
-        }
+setTimeout(function () {
+button.innerHTML = "📋 Copy Google Maps URL";
+}, 2000);
+} catch (error) {
+alert("Google Maps URL:\n\n" + text);
+}
 
-        document.body.removeChild(textarea);
-      }
-  </script>
+document.body.removeChild(textarea);
+}
+</script>
 </body>
 </html>
